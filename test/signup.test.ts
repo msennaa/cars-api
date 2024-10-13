@@ -34,3 +34,15 @@ test('should not create a new account with invalid cpf', async () => {
     const output = await signup(input)
     expect(output).toBe(-1)
 })
+
+test('should not create a new account with invalid email', async () => {
+    const input = {
+        name: 'any name',
+        email: `any_email${Math.random()}.com`,
+        cpf: '97456321558',
+        isPassenger: true
+    }
+    const output = await signup(input)
+    expect(output).toBe(-2)
+})
+
