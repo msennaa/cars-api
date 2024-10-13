@@ -23,7 +23,6 @@ test('should create a driver new account successfully', async () => {
     expect(output.accountId).toBeDefined();
 })
 
-
 test('should not create a new account with invalid cpf', async () => {
     const input = {
         name: 'any name',
@@ -31,8 +30,8 @@ test('should not create a new account with invalid cpf', async () => {
         cpf: '0000000000',
         isPassenger: true
     }
-    const output = await signup(input)
-    expect(output).toBe(-1)
+    const promise = signup(input)
+    expect(promise).rejects.toThrowError('Invalid cpf');
 })
 
 test('should not create a new account with invalid email', async () => {
@@ -42,8 +41,8 @@ test('should not create a new account with invalid email', async () => {
         cpf: '97456321558',
         isPassenger: true
     }
-    const output = await signup(input)
-    expect(output).toBe(-2)
+    const promise = signup(input)
+    expect(promise).rejects.toThrowError('Invalid email');
 })
 
 test('should not create a new account with invalid name', async () => {
@@ -53,8 +52,8 @@ test('should not create a new account with invalid name', async () => {
         cpf: '97456321558',
         isPassenger: true
     }
-    const output = await signup(input)
-    expect(output).toBe(-3)
+    const promise = signup(input)
+    expect(promise).rejects.toThrowError('Invalid name');
 })
 
 test('should not create a new account with an existing email', async () => {
@@ -66,8 +65,8 @@ test('should not create a new account with an existing email', async () => {
         isPassenger: true
     }
     await signup(input)
-    const output = await signup(input)
-    expect(output).toBe(-4)
+    const promise = signup(input)
+    expect(promise).rejects.toThrowError('Account already exists');
 })
 
 test('should not create a driver new account with invalid car plate', async () => {
@@ -78,6 +77,6 @@ test('should not create a driver new account with invalid car plate', async () =
         isDriver: true,
         carPlate: 'AAA000'
     }
-    const output = await signup(input)
-    expect(output).toBe(-5)
+    const promise = signup(input)
+    expect(promise).rejects.toThrowError('Invalid car plate');
 })
