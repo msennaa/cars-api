@@ -1,4 +1,4 @@
-import { signup } from '../src/signup'
+import { getAccount, signup } from '../src/signup'
 
 test('should create a passenger new account successfully', async () => {
     const input = {
@@ -9,6 +9,10 @@ test('should create a passenger new account successfully', async () => {
     }
     const output = await signup(input)
     expect(output.accountId).toBeDefined();
+    const outputGetAccount = await getAccount(output.accountId);
+    expect(outputGetAccount.name).toBe(input.name)
+    expect(outputGetAccount.email).toBe(input.email)
+    expect(outputGetAccount.cpf).toBe(input.cpf)
 })
 
 test('should create a driver new account successfully', async () => {
@@ -21,6 +25,11 @@ test('should create a driver new account successfully', async () => {
     }
     const output = await signup(input)
     expect(output.accountId).toBeDefined();
+    const outputGetAccount = await getAccount(output.accountId);
+    expect(outputGetAccount.name).toBe(input.name)
+    expect(outputGetAccount.email).toBe(input.email)
+    expect(outputGetAccount.cpf).toBe(input.cpf)
+    expect(outputGetAccount.car_plate).toBe(input.carPlate)
 })
 
 test('should not create a new account with invalid cpf', async () => {
