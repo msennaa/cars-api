@@ -46,3 +46,14 @@ test('should not create a new account with invalid email', async () => {
     expect(output).toBe(-2)
 })
 
+test('should not create a new account with invalid name', async () => {
+    const input = {
+        name: 'any_name',
+        email: `any_email${Math.random()}@mail.com`,
+        cpf: '97456321558',
+        isPassenger: true
+    }
+    const output = await signup(input)
+    expect(output).toBe(-3)
+})
+
