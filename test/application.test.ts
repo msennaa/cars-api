@@ -1,4 +1,4 @@
-import { getAccount, signup } from '../src/signup'
+import { getAccount, signup } from '../src/application'
 
 test('should create a passenger new account successfully', async () => {
     const input = {
