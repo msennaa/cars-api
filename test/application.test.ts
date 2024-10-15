@@ -1,9 +1,11 @@
 import AccountService from '../src/application';
+import { AccountDAOMemory } from '../src/resource';
 
 let accountService: AccountService;
 
 beforeEach(() => {
-    accountService = new AccountService()
+    const accountDAO = new AccountDAOMemory;
+    accountService = new AccountService(accountDAO);
 })
 
 test('should create a passenger new account successfully', async () => {
@@ -35,7 +37,7 @@ test('should create a driver new account successfully', async () => {
     expect(outputGetAccount.name).toBe(input.name)
     expect(outputGetAccount.email).toBe(input.email)
     expect(outputGetAccount.cpf).toBe(input.cpf)
-    expect(outputGetAccount.car_plate).toBe(input.carPlate)
+    expect(outputGetAccount.carPlate).toBe(input.carPlate)
 })
 
 test('should not create a new account with invalid cpf', async () => {
