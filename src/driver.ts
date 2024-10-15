@@ -1,8 +1,10 @@
 import express from 'express';
 import AccountService from './application';
+import { AccountDAODatabase } from './resource';
 const app = express();
 app.use(express.json());
-const accountService = new AccountService();
+const accountDAO = new AccountDAODatabase;
+const accountService = new AccountService(accountDAO);
 
 app.post("/signup", async function (req, res) {
     const input = req.body;

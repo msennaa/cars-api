@@ -4,8 +4,8 @@ import AccountDAO from './resource';
 
 export default class AccountService {
     accountDAO: AccountDAO
-    constructor() {
-        this.accountDAO = new AccountDAO();
+    constructor(accountDao: AccountDAO) {
+        this.accountDAO = accountDao;
     }
 
     async signup(input: any): Promise<any> {
