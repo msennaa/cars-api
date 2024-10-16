@@ -1,17 +1,33 @@
-import AccountDAO from './resource';
+import AccountRepository from './AccountRepository';
 import UseCase from './UseCase';
 
 export default class GetAccount implements UseCase {
-    accountDAO: AccountDAO;
+    accountRepository: AccountRepository;
 
-    constructor(accountDao: AccountDAO) {
-        this.accountDAO = accountDao;
+    constructor(accountRepository: AccountRepository) {
+        this.accountRepository = accountRepository;
     }
 
-    async execute(accountId: string): Promise<any> {
-        const account = await this.accountDAO.getAccountById(accountId);
-        return account;
+    async execute(accountId: string): Promise<Output> {
+        const account = await this.accountRepository.getAccountById(accountId);
+        return {
+            accountId: account.accountId,
+            name: account.name,
+            email: account.email,
+            cpf: account.getCpf(),
+            carPlate: account.carPlate,
+            isPassenger: account.isPassenger,
+            isDriver: account.isDriver
+        }
     }
 }
 
-
+type Output = {
+    accountId: string,
+    name: string,
+    email: string,
+    cpf: string,
+    carPlate: string,
+    isPassenger: boolean,
+    isDriver: boolean
+}

@@ -1,9 +1,6 @@
 import express from 'express';
-import AccountService, { AccountServiceProduction } from './application';
-import { AccountDAODatabase } from './resource';
 import SignUp from './SignUp';
 import GetAccount from './GetAccount';
-
 
 export default class API {
     app: any;
@@ -14,8 +11,6 @@ export default class API {
     }
 
     build() {
-        const accountDAO = new AccountDAODatabase;
-        const accountService = new AccountServiceProduction(accountDAO);
         this.app.post("/signup", async (req: any, res: any) => {
             const input = req.body;
             try {
