@@ -1,8 +1,7 @@
-import crypto from "crypto";
-import { validateCpf } from "./validateCpf";
 import AccountDAO from './resource';
 import MailerGateway from './MailerGateway';
 import UseCase from './UseCase';
+import Account from './Account';
 
 export default class SignUp implements UseCase {
     accountDAO: AccountDAO;
@@ -14,21 +13,9 @@ export default class SignUp implements UseCase {
     }
 
     async execute(input: any): Promise<any> {
-        const account = {
-            accountId: crypto.randomUUID(),
-            name: input.name,
-            email: input.email,
-            cpf: input.cpf,
-            carPlate: input.carPlate,
-            isPassenger: input.isPassenger,
-            isDriver: input.isDriver
-        };
         const existingAccount = await this.accountDAO.getAccountByEmail(input.email);
         if (existingAccount) throw new Error('Account already exists');
-        if (!input.name.match(/[a-zA-Z] [a-zA-Z]+/)) throw new Error('Invalid name');
-        if (!input.email.match(/^(.+)@(.+)$/)) throw new Error('Invalid email');
-        if (!validateCpf(input.cpf)) throw new Error('Invalid cpf');
-        if (input.isDriver && !input.carPlate.match(/[A-Z]{3}[0-9]{4}/)) throw new Error('Invalid car plate');
+        const account = Account.create(input.name, input.email, input.cpf, input.carPlate, input.isPassenger, input.isDriver);
         await this.accountDAO.saveAccount(account);
         this.mailerGateway.send(account.email, 'Welcome', '');
         return {
