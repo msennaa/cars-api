@@ -1,12 +1,11 @@
-
-import { AccountRepositoryDatabase, AccountRepositoryMemory } from '../src/infra/repository/AccountRepository';
+import { AccountRepositoryDatabase, AccountRepositoryMemory } from '../../src/infra/repository/AccountRepository';
 import sinon from 'sinon';
-import Account from '../src/domain/Account';
-import DatabaseConnection, { PgPromiseAdapter } from '../src/infra/database/DatabaseConnection';
-import GetAccount from '../src/application/usecase/GetAccount';
-import SignUp from '../src/application/usecase/SignUp';
-import MailerGateway from '../src/application/gateway/MailerGateway';
-import MailerGatewayFake from '../src/infra/gateway/MailerGatewayFake';
+import Account from '../../src/domain/Account';
+import DatabaseConnection, { PgPromiseAdapter } from '../../src/infra/database/DatabaseConnection';
+import GetAccount from '../../src/application/usecase/GetAccount';
+import SignUp from '../../src/application/usecase/SignUp';
+import MailerGateway from '../../src/application/gateway/MailerGateway';
+import MailerGatewayFake from '../../src/infra/gateway/MailerGatewayFake';
 
 let connection: DatabaseConnection;
 let signUp: SignUp;
@@ -22,6 +21,7 @@ beforeEach(() => {
 })
 
 test('should create a passenger new account successfully', async () => {
+    const stub = sinon.stub(MailerGatewayFake.prototype, 'send').resolves();
     const input = {
         name: 'any name',
         email: `any_email${Math.random()}@mail.com`,
@@ -34,9 +34,11 @@ test('should create a passenger new account successfully', async () => {
     expect(outputGetAccount.name).toBe(input.name)
     expect(outputGetAccount.email).toBe(input.email)
     expect(outputGetAccount.cpf).toBe(input.cpf)
+    stub.restore();
 })
 
 test('should create a driver new account successfully', async () => {
+    const stub = sinon.stub(MailerGatewayFake.prototype, 'send').resolves();
     const input = {
         name: 'any name',
         email: `any_email${Math.random()}@mail.com`,
@@ -51,6 +53,7 @@ test('should create a driver new account successfully', async () => {
     expect(outputGetAccount.email).toBe(input.email)
     expect(outputGetAccount.cpf).toBe(input.cpf)
     expect(outputGetAccount.carPlate).toBe(input.carPlate)
+    stub.restore();
 })
 
 test('should not create a new account with invalid cpf', async () => {
@@ -89,6 +92,7 @@ test('should not create a new account with invalid name', async () => {
 })
 
 test('should not create a new account with an existing email', async () => {
+    const stub = sinon.stub(MailerGatewayFake.prototype, 'send').resolves();
     signUp = new SignUp(new AccountRepositoryMemory(), mailerGateway);
     const email = `any_email${Math.random()}@mail.com`;
     const input = {
@@ -100,6 +104,7 @@ test('should not create a new account with an existing email', async () => {
     await signUp.execute(input)
     const promise = signUp.execute(input)
     expect(promise).rejects.toThrowError('Account already exists');
+    stub.restore();
 })
 
 test('should not create a driver new account with invalid car plate', async () => {
@@ -116,6 +121,7 @@ test('should not create a driver new account with invalid car plate', async () =
 })
 
 test('should create a passenger account with AccountRepository stub', async function () {
+    const stub = sinon.stub(MailerGatewayFake.prototype, 'send').resolves();
     const email = `any_email${Math.random()}@mail.com`
     const inputSignUp = {
         name: 'any name',
@@ -143,6 +149,7 @@ test('should create a passenger account with AccountRepository stub', async func
     stubSaveAccount.restore();
     stubGetAccountByEmail.restore();
     stubGetAccountById.restore();
+    stub.restore();
 });
 
 afterEach(async () => {
