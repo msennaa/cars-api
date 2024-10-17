@@ -3,12 +3,15 @@ import { AccountRepositoryDatabase } from '../src/AccountRepository';
 import SignUp from '../src/SignUp';
 import sinon from 'sinon';
 import Account from '../src/Account';
+import DatabaseConnection, { PgPromiseAdapter } from '../src/DatabaseConnection';
 
+let connection: DatabaseConnection;
 let signUp: SignUp;
 let getAccount: GetAccount;
 
 beforeEach(() => {
-    const accountRepository = new AccountRepositoryDatabase();
+    connection = new PgPromiseAdapter();
+    const accountRepository = new AccountRepositoryDatabase(connection);
     signUp = new SignUp(accountRepository);
     getAccount = new GetAccount(accountRepository);
 })
@@ -132,3 +135,7 @@ test('should create a passenger account with AccountRepository stub', async func
     stubGetAccountByEmail.restore();
     stubGetAccountById.restore();
 });
+
+afterEach(async () => {
+    await connection.close();
+})
