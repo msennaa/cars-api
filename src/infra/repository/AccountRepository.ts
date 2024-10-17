@@ -1,11 +1,6 @@
-import Account from './Account';
-import DatabaseConnection from './DatabaseConnection';
-
-export default interface AccountRepository {
-    getAccountByEmail(email: string): Promise<Account | undefined>;
-    getAccountById(accountId: string): Promise<Account>;
-    saveAccount(account: Account): Promise<void>;
-}
+import Account from '../../domain/Account';
+import AccountRepository from '../../application/repository/AccountRepository';
+import DatabaseConnection from '../database/DatabaseConnection';
 
 export class AccountRepositoryDatabase implements AccountRepository {
     constructor(readonly connection: DatabaseConnection) {

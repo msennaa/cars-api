@@ -1,14 +1,17 @@
-import AccountController from './AccountController';
-import { AccountRepositoryDatabase } from './AccountRepository';
-import { PgPromiseAdapter } from './DatabaseConnection';
-import GetAccount from './GetAccount';
-import { ExpressAdapter, HapiAdapter } from './HttpServer';
-import SignUp from './SignUp';
+import AccountController from './infra/controller/AccountController';
+import { AccountRepositoryDatabase } from './infra/repository/AccountRepository';
+import GetAccount from './application/usecase/GetAccount';
+import SignUp from './application/usecase/SignUp';
+import { PgPromiseAdapter } from './infra/database/DatabaseConnection';
+import { ExpressAdapter, HapiAdapter } from './infra/http/HttpServer';
+import MailerGatewayFake from './infra/gateway/MailerGatewayFake';
+
 const connection = new PgPromiseAdapter();
 const accountRepository = new AccountRepositoryDatabase(connection);
-const signup = new SignUp(accountRepository);
+const mailerGateway = new MailerGatewayFake();
+const signup = new SignUp(accountRepository, mailerGateway);
 const getAccount = new GetAccount(accountRepository);
-// const httpServer = new ExpressAdapter();
-const httpServer = new HapiAdapter();
+const httpServer = new ExpressAdapter();
+// const httpServer = new HapiAdapter();
 new AccountController(httpServer, signup, getAccount);
 httpServer.listen(3000)

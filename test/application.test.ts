@@ -1,18 +1,23 @@
-import GetAccount from '../src/GetAccount';
-import { AccountRepositoryDatabase } from '../src/AccountRepository';
-import SignUp from '../src/SignUp';
+
+import { AccountRepositoryDatabase, AccountRepositoryMemory } from '../src/infra/repository/AccountRepository';
 import sinon from 'sinon';
-import Account from '../src/Account';
-import DatabaseConnection, { PgPromiseAdapter } from '../src/DatabaseConnection';
+import Account from '../src/domain/Account';
+import DatabaseConnection, { PgPromiseAdapter } from '../src/infra/database/DatabaseConnection';
+import GetAccount from '../src/application/usecase/GetAccount';
+import SignUp from '../src/application/usecase/SignUp';
+import MailerGateway from '../src/application/gateway/MailerGateway';
+import MailerGatewayFake from '../src/infra/gateway/MailerGatewayFake';
 
 let connection: DatabaseConnection;
 let signUp: SignUp;
 let getAccount: GetAccount;
+let mailerGateway: MailerGateway;
 
 beforeEach(() => {
     connection = new PgPromiseAdapter();
     const accountRepository = new AccountRepositoryDatabase(connection);
-    signUp = new SignUp(accountRepository);
+    mailerGateway = new MailerGatewayFake();
+    signUp = new SignUp(accountRepository, mailerGateway);
     getAccount = new GetAccount(accountRepository);
 })
 
@@ -60,6 +65,7 @@ test('should not create a new account with invalid cpf', async () => {
 })
 
 test('should not create a new account with invalid email', async () => {
+    signUp = new SignUp(new AccountRepositoryMemory(), mailerGateway);
     const input = {
         name: 'any name',
         email: `any_email${Math.random()}.com`,
@@ -71,6 +77,7 @@ test('should not create a new account with invalid email', async () => {
 })
 
 test('should not create a new account with invalid name', async () => {
+    signUp = new SignUp(new AccountRepositoryMemory(), mailerGateway);
     const input = {
         name: 'any_name',
         email: `any_email${Math.random()}@mail.com`,
@@ -82,6 +89,7 @@ test('should not create a new account with invalid name', async () => {
 })
 
 test('should not create a new account with an existing email', async () => {
+    signUp = new SignUp(new AccountRepositoryMemory(), mailerGateway);
     const email = `any_email${Math.random()}@mail.com`;
     const input = {
         name: 'any name',
@@ -95,6 +103,7 @@ test('should not create a new account with an existing email', async () => {
 })
 
 test('should not create a driver new account with invalid car plate', async () => {
+    signUp = new SignUp(new AccountRepositoryMemory(), mailerGateway);
     const input = {
         name: 'any name',
         email: `any_email${Math.random()}@mail.com`,
