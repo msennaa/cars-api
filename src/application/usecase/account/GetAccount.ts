@@ -1,5 +1,5 @@
-import UseCase from './UseCase';
-import AccountRepository from '../repository/AccountRepository';
+import UseCase from '../UseCase';
+import AccountRepository from '../../repository/AccountRepository';
 
 export default class GetAccount implements UseCase {
     accountRepository: AccountRepository;
