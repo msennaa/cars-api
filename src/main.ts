@@ -1,7 +1,7 @@
 import AccountController from './infra/controller/AccountController';
 import { AccountRepositoryDatabase } from './infra/repository/AccountRepository';
-import GetAccount from './application/usecase/GetAccount';
-import SignUp from './application/usecase/SignUp';
+import GetAccount from './application/usecase/account/GetAccount';
+import SignUp from './application/usecase/account/SignUp';
 import { PgPromiseAdapter } from './infra/database/DatabaseConnection';
 import { ExpressAdapter, HapiAdapter } from './infra/http/HttpServer';
 import MailerGatewayFake from './infra/gateway/MailerGatewayFake';

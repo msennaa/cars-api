@@ -1,5 +1,5 @@
-import GetAccount from '../../application/usecase/GetAccount';
-import SignUp from '../../application/usecase/SignUp';
+import GetAccount from '../../application/usecase/account/GetAccount';
+import SignUp from '../../application/usecase/account/SignUp';
 import HttpServer from '../http/HttpServer';
 
 export default class AccountController {

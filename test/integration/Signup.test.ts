@@ -2,8 +2,8 @@ import { AccountRepositoryDatabase, AccountRepositoryMemory } from '../../src/in
 import sinon from 'sinon';
 import Account from '../../src/domain/Account';
 import DatabaseConnection, { PgPromiseAdapter } from '../../src/infra/database/DatabaseConnection';
-import GetAccount from '../../src/application/usecase/GetAccount';
-import SignUp from '../../src/application/usecase/SignUp';
+import GetAccount from '../../src/application/usecase/account/GetAccount';
+import SignUp from '../../src/application/usecase/account/SignUp';
 import MailerGateway from '../../src/application/gateway/MailerGateway';
 import MailerGatewayFake from '../../src/infra/gateway/MailerGatewayFake';
 
