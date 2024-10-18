@@ -19,7 +19,7 @@ beforeEach(() => {
     mailerGateway = new MailerGatewayFake();
     signUp = new SignUp(accountRepository, mailerGateway);
     const rideRepository = new RideRepositoryDatabase(connection);
-    requestRide = new RequestRide(rideRepository);
+    requestRide = new RequestRide(rideRepository, accountRepository);
     getRide = new GetRide(rideRepository);
 })
 
@@ -49,6 +49,26 @@ test('Should request a ride', async function () {
     expect(outputGetRide.toLat).toBe(inputRequestRide.toLat);
     expect(outputGetRide.toLong).toBe(inputRequestRide.toLong);
     expect(outputGetRide.status).toBe('requested');
+})
+
+test('Should not request a ride if account belongs a driver', async function () {
+    const input = {
+        name: 'any name',
+        email: `any_email${Math.random()}@mail.com`,
+        cpf: '97456321558',
+        isPassenger: false,
+        carPlate: 'AAA9999',
+        isDriver: true,
+    }
+    const outputSignup = await signUp.execute(input)
+    const inputRequestRide = {
+        passengerId: outputSignup.accountId,
+        fromLat: -27.584905257808835,
+        fromLong: -48.545022195325124,
+        toLat: -27.496887588317275,
+        toLong: -48.522234807851476
+    }
+    await expect(() => requestRide.execute(inputRequestRide)).rejects.toThrowError('This account is not from a passenger');
 })
 
 afterEach(async () => {
