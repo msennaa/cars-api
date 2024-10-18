@@ -71,6 +71,26 @@ test('Should not request a ride if account belongs a driver', async function () 
     await expect(() => requestRide.execute(inputRequestRide)).rejects.toThrowError('This account is not from a passenger');
 })
 
+test.only('should not request ride if passenger has unfinished ride', async function () {
+    const input = {
+        name: 'any name',
+        email: `any_email${Math.random()}@mail.com`,
+        cpf: '97456321558',
+        isPassenger: true
+    }
+    const outputSignup = await signUp.execute(input)
+
+    const inputRequestRide = {
+        passengerId: outputSignup.accountId,
+        fromLat: -27.584905257808835,
+        fromLong: -48.545022195325124,
+        toLat: -27.496887588317275,
+        toLong: -48.522234807851476
+    }
+    await requestRide.execute(inputRequestRide);
+    await expect(() => requestRide.execute(inputRequestRide)).rejects.toThrowError('This passenger has an active ride');
+})
+
 afterEach(async () => {
     await connection.close();
 })
