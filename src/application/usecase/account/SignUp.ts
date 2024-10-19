@@ -1,4 +1,4 @@
-import Account from '../../../domain/Account';
+import Account from '../../../domain/entity/Account';
 import UseCase from '../UseCase';
 import MailerGateway from '../../gateway/MailerGateway';
 import AccountRepository from '../../repository/AccountRepository';

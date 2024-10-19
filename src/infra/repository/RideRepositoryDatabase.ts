@@ -1,5 +1,5 @@
 import RideRepository from '../../application/repository/RideRepository';
-import Ride from '../../domain/Ride';
+import Ride from '../../domain/entity/Ride';
 import DatabaseConnection from '../database/DatabaseConnection';
 
 export default class RideRepositoryDatabase implements RideRepository {

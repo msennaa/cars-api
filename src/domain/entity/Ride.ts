@@ -1,11 +1,11 @@
 import crypto from 'crypto';
-import Coord from './Coord';
+import Coord from '../vo/Coord';
 
 export default class Ride {
     private from: Coord;
     private to: Coord;
 
-    constructor(readonly rideId: string, readonly passengerId: string, readonly driverId: string, fromLat: number, fromLong: number, toLat: number, toLong: number, readonly status: string, readonly date: Date) {
+    constructor(readonly rideId: string, readonly passengerId: string, public driverId: string, fromLat: number, fromLong: number, toLat: number, toLong: number, public status: string, readonly date: Date) {
         this.from = new Coord(fromLat, fromLong);
         this.to = new Coord(toLat, toLong);
     }
@@ -23,5 +23,11 @@ export default class Ride {
 
     getTo() {
         return this.to;
+    }
+
+    accept(driverId: string) {
+        if (status !== 'requested' || driverId) throw new Error('');
+        this.driverId = driverId;
+        this.status = 'accepted';
     }
 } 

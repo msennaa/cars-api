@@ -1,5 +1,5 @@
-import Coord from '../../src/domain/Coord';
-import Segment from '../../src/domain/Segment';
+import Coord from '../../src/domain/vo/Coord';
+import Segment from '../../src/domain/vo/Segment';
 
 test('Should calculate the segment distance', function () {
     const from = new Coord(-27.584905257808835, -48.545022195325124);

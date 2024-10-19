@@ -1,4 +1,4 @@
-import Coord from './Coord';
+import Coord from '../vo/Coord';
 
 export default class DistanceCalculator {
 

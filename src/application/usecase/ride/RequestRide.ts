@@ -1,4 +1,4 @@
-import Ride from '../../../domain/Ride';
+import Ride from '../../../domain/entity/Ride';
 import AccountRepository from '../../repository/AccountRepository';
 import RideRepository from '../../repository/RideRepository';
 import UseCase from '../UseCase';

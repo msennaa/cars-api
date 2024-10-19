@@ -1,4 +1,4 @@
-import Coord from '../../src/domain/Coord'
+import Coord from '../../src/domain/vo/Coord'
 
 test('should create a valid coordinate', function () {
     const coord = new Coord(90, 180);

@@ -1,5 +1,5 @@
-import Coord from '../../src/domain/Coord'
-import DistanceCalculator from '../../src/domain/DistanceCalculator';
+import Coord from '../../src/domain/vo/Coord'
+import DistanceCalculator from '../../src/domain/service/DistanceCalculator';
 
 test('Should calculate the distance between two coordinates', function () {
     const from = new Coord(-27.584905257808835, -48.545022195325124);
