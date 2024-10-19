@@ -20,7 +20,7 @@ export class AccountRepositoryDatabase implements AccountRepository {
     }
 
     async saveAccount(account: Account) {
-        await this.connection.query("insert into cccat17.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver) values ($1, $2, $3, $4, $5, $6, $7)", [account.accountId, account.name, account.email, account.getCpf(), account.carPlate, !!account.isPassenger, !!account.isDriver]);
+        await this.connection.query("insert into cccat17.account (account_id, name, email, cpf, car_plate, is_passenger, is_driver) values ($1, $2, $3, $4, $5, $6, $7)", [account.accountId, account.getName(), account.getEmail(), account.getCpf(), account.getCarPlate(), !!account.isPassenger, !!account.isDriver]);
     }
 }
 
@@ -32,7 +32,7 @@ export class AccountRepositoryMemory implements AccountRepository {
     }
 
     async getAccountByEmail(email: string): Promise<any> {
-        return this.accounts.find((account: Account) => account.email === email);
+        return this.accounts.find((account: Account) => account.getEmail() === email);
     }
 
     async getAccountById(accountId: string): Promise<any> {

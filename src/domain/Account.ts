@@ -1,13 +1,20 @@
 import crypto from "crypto";
 import Cpf from './Cpf';
+import Email from './Email';
+import Name from './Name';
+import CarPlate from './CarPlate';
 
 export default class Account {
     private cpf: Cpf;
-    constructor(readonly accountId: string, readonly name: string, readonly email: string, cpf: string, readonly carPlate: string, readonly isPassenger: boolean, readonly isDriver: boolean) {
-        if (!name.match(/[a-zA-Z] [a-zA-Z]+/)) throw new Error('Invalid name');
-        if (!email.match(/^(.+)@(.+)$/)) throw new Error('Invalid email');
+    private email: Email;
+    private name: Name;
+    private carPlate: CarPlate;
+
+    constructor(readonly accountId: string, name: string, email: string, cpf: string, carPlate: string, readonly isPassenger: boolean, readonly isDriver: boolean) {
+        this.name = new Name(name)
+        this.email = new Email(email);
         this.cpf = new Cpf(cpf);
-        if (isDriver && !carPlate.match(/[A-Z]{3}[0-9]{4}/)) throw new Error('Invalid car plate');
+        this.carPlate = new CarPlate(carPlate)
     }
 
     static create(name: string, email: string, cpf: string, carPlate: string, isPassenger: boolean, isDriver: boolean) {
@@ -17,5 +24,21 @@ export default class Account {
 
     getCpf() {
         return this.cpf.getValue();
+    }
+
+    getEmail() {
+        return this.email.getValue();
+    }
+
+    setEmail(email: string) {
+        return this.email = new Email(email);
+    }
+
+    getName() {
+        return this.name.getValue();
+    }
+
+    getCarPlate() {
+        return this.carPlate.getValue();
     }
 }

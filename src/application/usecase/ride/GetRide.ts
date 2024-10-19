@@ -8,7 +8,16 @@ export default class GetRide implements UseCase {
 
     async execute(rideId: string): Promise<Output> {
         const ride = await this.rideRepository.getRideById(rideId);
-        return ride;
+        return {
+            rideId: ride.rideId,
+            passengerId: ride.passengerId,
+            fromLat: ride.getFrom().getLat(),
+            fromLong: ride.getFrom().getLong(),
+            toLat: ride.getTo().getLat(),
+            toLong: ride.getTo().getLong(),
+            status: ride.status,
+            date: ride.date,
+        };
     }
 }
 

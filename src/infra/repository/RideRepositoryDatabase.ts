@@ -6,7 +6,7 @@ export default class RideRepositoryDatabase implements RideRepository {
     constructor(readonly connection: DatabaseConnection) { }
 
     async saveRide(ride: Ride): Promise<void> {
-        await this.connection.query("insert into ride (ride_id, passenger_id, driver_id, from_lat, from_long, to_lat, to_long, status, date) values ($1, $2, $3, $4, $5, $6, $7, $8, $9)", [ride.rideId, ride.passengerId, ride.driverId || null, ride.fromLat, ride.fromLong, ride.toLat, ride.toLong, ride.status, ride.date])
+        await this.connection.query("insert into ride (ride_id, passenger_id, driver_id, from_lat, from_long, to_lat, to_long, status, date) values ($1, $2, $3, $4, $5, $6, $7, $8, $9)", [ride.rideId, ride.passengerId, ride.driverId || null, ride.getFrom().getLat(), ride.getFrom().getLong(), ride.getTo().getLat(), ride.getTo().getLong(), ride.status, ride.date])
     }
 
     async getRideById(rideId: string): Promise<Ride> {
