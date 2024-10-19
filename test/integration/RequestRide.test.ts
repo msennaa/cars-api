@@ -71,7 +71,7 @@ test('Should not request a ride if account belongs a driver', async function () 
     await expect(() => requestRide.execute(inputRequestRide)).rejects.toThrowError('This account is not from a passenger');
 })
 
-test.only('should not request ride if passenger has unfinished ride', async function () {
+test('should not request ride if passenger has unfinished ride', async function () {
     const input = {
         name: 'any name',
         email: `any_email${Math.random()}@mail.com`,
