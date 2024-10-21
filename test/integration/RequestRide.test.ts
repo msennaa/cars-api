@@ -5,6 +5,7 @@ import RequestRide from '../../src/application/usecase/ride/RequestRide';
 import DatabaseConnection, { PgPromiseAdapter } from '../../src/infra/database/DatabaseConnection';
 import MailerGatewayFake from '../../src/infra/gateway/MailerGatewayFake';
 import { AccountRepositoryDatabase } from '../../src/infra/repository/AccountRepository';
+import PositionRepositoryDatabase from '../../src/infra/repository/PositionRepositoryDatabase';
 import RideRepositoryDatabase from '../../src/infra/repository/RideRepositoryDatabase';
 
 let connection: DatabaseConnection;
@@ -19,8 +20,9 @@ beforeEach(() => {
     mailerGateway = new MailerGatewayFake();
     signUp = new SignUp(accountRepository, mailerGateway);
     const rideRepository = new RideRepositoryDatabase(connection);
+    const positionRepository = new PositionRepositoryDatabase(connection);
     requestRide = new RequestRide(rideRepository, accountRepository);
-    getRide = new GetRide(rideRepository);
+    getRide = new GetRide(rideRepository, positionRepository);
 })
 
 test('Should request a ride', async function () {
