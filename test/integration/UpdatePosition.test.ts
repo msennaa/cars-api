@@ -84,6 +84,7 @@ test.only('Should update position from a ride', async function () {
     expect(outputGetRide.currentLat).toBe(-27.496887588317275);
     expect(outputGetRide.currentLong).toBe(-48.522234807851476);
     expect(outputGetRide.distance).toBe(10);
+    expect(outputGetRide.fare).toBe(21);
 })
 
 afterEach(async () => {
