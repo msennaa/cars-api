@@ -26,7 +26,8 @@ test('should create a passenger new account successfully', async () => {
         name: 'any name',
         email: `any_email${Math.random()}@mail.com`,
         cpf: '97456321558',
-        isPassenger: true
+        isPassenger: true,
+        password: '123456'
     }
     const output = await signUp.execute(input)
     expect(output.accountId).toBeDefined();
@@ -34,6 +35,7 @@ test('should create a passenger new account successfully', async () => {
     expect(outputGetAccount.name).toBe(input.name)
     expect(outputGetAccount.email).toBe(input.email)
     expect(outputGetAccount.cpf).toBe(input.cpf)
+    expect(outputGetAccount.password).toBe(input.password);
     stub.restore();
 })
 
