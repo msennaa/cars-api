@@ -15,7 +15,7 @@ export default class SignUp implements UseCase {
     async execute(input: Input): Promise<Output> {
         const existingAccount = await this.accountRepository.getAccountByEmail(input.email);
         if (existingAccount) throw new Error('Account already exists');
-        const account = Account.create(input.name, input.email, input.cpf, input.carPlate || '', !!input.isPassenger, !!input.isDriver);
+        const account = Account.create(input.name, input.email, input.cpf, input.carPlate || '', !!input.isPassenger, !!input.isDriver, input.password);
         await this.accountRepository.saveAccount(account);
         this.mailerGateway.send(account.getEmail(), 'Welcome', '');
         return {
@@ -30,7 +30,8 @@ type Input = {
     cpf: string,
     carPlate?: string,
     isPassenger?: boolean,
-    isDriver?: boolean
+    isDriver?: boolean,
+    password?: string
 }
 
 type Output = {
