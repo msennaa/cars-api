@@ -8,7 +8,7 @@ export default class Ride {
     private from: Coord;
     private to: Coord;
 
-    constructor(readonly rideId: string, readonly passengerId: string, public driverId: string, fromLat: number, fromLong: number, toLat: number, toLong: number, public status: string, readonly date: Date, public distance: number) {
+    constructor(readonly rideId: string, readonly passengerId: string, public driverId: string, fromLat: number, fromLong: number, toLat: number, toLong: number, public status: string, readonly date: Date, public distance: number, public fare: number) {
         this.from = new Coord(fromLat, fromLong);
         this.to = new Coord(toLat, toLong);
     }
@@ -18,7 +18,8 @@ export default class Ride {
         const status = 'requested';
         const date = new Date();
         const distance = 0;
-        return new Ride(rideId, passengerId, '', fromLat, fromLong, toLat, toLong, status, date, distance)
+        const fare = 0;
+        return new Ride(rideId, passengerId, '', fromLat, fromLong, toLat, toLong, status, date, distance, fare)
     }
 
     getFrom() {
@@ -45,6 +46,6 @@ export default class Ride {
         if (this.status !== 'in_progress') throw new Error('Invalid status')
         const segment = new Segment(lastPosition.coord, currentPosition.coord);
         this.distance += segment.getDistance();
-
+        this.fare += this.distance * 2.1;
     }
 } 
