@@ -46,6 +46,17 @@ export default class Ride {
         if (this.status !== 'in_progress') throw new Error('Invalid status')
         const segment = new Segment(lastPosition.coord, currentPosition.coord);
         this.distance += segment.getDistance();
-        this.fare += this.distance * 2.1;
+        if (currentPosition.date.getDay() === 0) {
+            this.fare += this.distance * 5;
+            return;
+        }
+        if (currentPosition.date.getHours() > 18 || currentPosition.date.getHours() < 8) {
+            this.fare += this.distance * 3.9;
+            return;
+        }
+        if (currentPosition.date.getHours() <= 18 && currentPosition.date.getHours() >= 8) {
+            this.fare += this.distance * 2.1;
+            return;
+        }
     }
 } 
