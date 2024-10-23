@@ -38,8 +38,13 @@ export default class Ride {
     }
 
     start() {
-        if (this.status !== 'accepted') throw new Error('Invalid status')
-        this.status = 'in_progress'
+        if (this.status !== 'accepted') throw new Error('Invalid status');
+        this.status = 'in_progress';
+    }
+
+    finish() {
+        if (this.status !== 'in_progress') throw new Error('Invalid status');
+        this.status = 'completed';
     }
 
     updatePosition(lastPosition: Position, currentPosition: Position) {
