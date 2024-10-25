@@ -1,4 +1,6 @@
 import AccountGateway from '../../src/application/gateway/AccountGateway';
+import GenerateInvoice from '../../src/application/usecase/invoice/GenerateInvoice';
+import ProcessPayment from '../../src/application/usecase/payment/ProcessPayment';
 import AcceptRide from '../../src/application/usecase/ride/AcceptRide';
 import FinishRide from '../../src/application/usecase/ride/FinishRide';
 import GetRide from '../../src/application/usecase/ride/GetRide';
@@ -7,7 +9,9 @@ import StartRide from '../../src/application/usecase/ride/StartRide';
 import UpdatePosition from '../../src/application/usecase/ride/UpdatePosition';
 import DatabaseConnection, { PgPromiseAdapter } from '../../src/infra/database/DatabaseConnection';
 import AccountGatewayHttp from '../../src/infra/gateway/AccountGatewayHttp';
+import PaymentGatewayHttp from '../../src/infra/gateway/PaymentGatewayHttp';
 import HttpClient, { AxiosAdapter } from '../../src/infra/http/HttpClient';
+import Mediator from '../../src/infra/mediator/Mediator';
 import PositionRepositoryDatabase from '../../src/infra/repository/PositionRepositoryDatabase';
 import RideRepositoryDatabase from '../../src/infra/repository/RideRepositoryDatabase';
 
@@ -31,7 +35,16 @@ beforeEach(() => {
     acceptRide = new AcceptRide(rideRepository, accountGateway);
     startRide = new StartRide(rideRepository);
     updatePosition = new UpdatePosition(rideRepository, positionRepository);
-    finishRide = new FinishRide(rideRepository)
+    const processPayment = new ProcessPayment();
+    const generateInvoice = new GenerateInvoice();
+    const mediator = new Mediator();
+    // mediator.register('rideCompleted', processPayment.execute)
+    // mediator.register('rideCompleted', async function (data: any) {
+    //     await processPayment.execute(data);
+    //     await generateInvoice.execute(data);
+    // })
+    const paymentGateway = new PaymentGatewayHttp(httpClient);
+    finishRide = new FinishRide(rideRepository, mediator, paymentGateway);
 })
 
 test('Should finish a ride', async function () {
