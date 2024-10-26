@@ -3,7 +3,7 @@ import { AccountRepositoryDatabase } from './infra/repository/AccountRepository'
 import GetAccount from './application/usecase/account/GetAccount';
 import SignUp from './application/usecase/account/SignUp';
 import { PgPromiseAdapter } from './infra/database/DatabaseConnection';
-import { ExpressAdapter, HapiAdapter, HyperExpressAdapter } from './infra/http/HttpServer';
+import { ExpressAdapter, FastifyAdapter, HapiAdapter, HyperExpressAdapter } from './infra/http/HttpServer';
 import MailerGatewayFake from './infra/gateway/MailerGatewayFake';
 import Registry from './infra/di/Registry';
 
@@ -14,7 +14,8 @@ const signup = new SignUp(accountRepository, mailerGateway);
 const getAccount = new GetAccount(accountRepository);
 // const httpServer = new ExpressAdapter();
 // const httpServer = new HapiAdapter();
-const httpServer = new HyperExpressAdapter();
+// const httpServer = new HyperExpressAdapter();
+const httpServer = new FastifyAdapter();
 Registry.getInstance().provide('httpServer', httpServer);
 Registry.getInstance().provide('signup', signup)
 Registry.getInstance().provide('getAccount', getAccount);
