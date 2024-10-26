@@ -12,6 +12,7 @@ import AccountGatewayHttp from '../../src/infra/gateway/AccountGatewayHttp';
 import PaymentGatewayHttp from '../../src/infra/gateway/PaymentGatewayHttp';
 import HttpClient, { AxiosAdapter } from '../../src/infra/http/HttpClient';
 import Mediator from '../../src/infra/mediator/Mediator';
+import { RabbitMQAdapter } from '../../src/infra/queue/Queue';
 import PositionRepositoryDatabase from '../../src/infra/repository/PositionRepositoryDatabase';
 import RideRepositoryDatabase from '../../src/infra/repository/RideRepositoryDatabase';
 
@@ -24,7 +25,7 @@ let updatePosition: UpdatePosition;
 let accountGateway: AccountGateway;
 let finishRide: FinishRide;
 
-beforeEach(() => {
+beforeEach(async () => {
     connection = new PgPromiseAdapter();
     const rideRepository = new RideRepositoryDatabase(connection);
     const positionRepository = new PositionRepositoryDatabase(connection);
@@ -44,7 +45,9 @@ beforeEach(() => {
     //     await generateInvoice.execute(data);
     // })
     const paymentGateway = new PaymentGatewayHttp(httpClient);
-    finishRide = new FinishRide(rideRepository, mediator, paymentGateway);
+    const queue = new RabbitMQAdapter();
+    await queue.connect();
+    finishRide = new FinishRide(rideRepository, mediator, paymentGateway, queue);
 })
 
 test('Should finish a ride', async function () {
