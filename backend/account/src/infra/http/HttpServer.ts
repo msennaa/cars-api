@@ -34,34 +34,6 @@ export class ExpressAdapter implements HttpServer {
     }
 }
 
-export class HapiAdapter implements HttpServer {
-    server: Hapi.Server;
-
-    constructor() {
-        this.server = Hapi.server({})
-    }
-
-    register(method: string, url: string, callback: Function): void {
-        this.server.route({
-            method,
-            path: url.replace(/\:/g, ''),
-            handler: async (request: any, reply: any) => {
-                try {
-                    const output = await callback(request.params, request.payload);
-                    return output;
-                } catch (error: any) {
-                    return reply.response({ message: error.message }).code(422)
-                }
-            }
-        })
-    }
-
-    listen(port: number): void {
-        this.server.settings.port = port;
-        this.server.start();
-    }
-}
-
 export class HyperExpressAdapter implements HttpServer {
     app: HyperExpress.Server;
 
@@ -119,4 +91,30 @@ export class FastifyAdapter implements HttpServer {
 
     }
 }
+export class HapiAdapter implements HttpServer {
+    server: Hapi.Server;
 
+    constructor() {
+        this.server = Hapi.server({})
+    }
+
+    register(method: string, url: string, callback: Function): void {
+        this.server.route({
+            method,
+            path: url.replace(/\:/g, ''),
+            handler: async (request: any, reply: any) => {
+                try {
+                    const output = await callback(request.params, request.payload);
+                    return output;
+                } catch (error: any) {
+                    return reply.response({ message: error.message }).code(422)
+                }
+            }
+        })
+    }
+
+    listen(port: number): void {
+        this.server.settings.port = port;
+        this.server.start();
+    }
+}
