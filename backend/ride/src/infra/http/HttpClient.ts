@@ -6,6 +6,10 @@ export default interface HttpClient {
     post(url: string, body: any): Promise<any>;
 }
 
+axios.defaults.validateStatus = function () {
+    return true;
+}
+
 export class AxiosAdapter implements HttpClient {
     async get(url: string): Promise<any> {
         const response = await axios.get(url);
