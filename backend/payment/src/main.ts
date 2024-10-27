@@ -4,6 +4,7 @@ import Registry from './infra/di/Registry';
 import ProcessPayment from './application/usecase/payment/ProcessPayment';
 import PaymentController from './infra/controller/PaymentController';
 import { RabbitMQAdapter } from './infra/queue/Queue';
+import QueueController from './infra/controller/QueueController';
 
 (async () => {
     const connection = new PgPromiseAdapter();
@@ -13,9 +14,7 @@ import { RabbitMQAdapter } from './infra/queue/Queue';
     new PaymentController(httpServer, processPayment)
     const queue = new RabbitMQAdapter();
     await queue.connect();
-    queue.consume('rideCompleted.processPayment', async (input: any) => {
-        await processPayment.execute(input);
-    })
+    await queue.setup('rideCompleted', 'rideCompleted.processPayment')
+    new QueueController(queue, processPayment);
     httpServer.listen(3002)
 })();
-
