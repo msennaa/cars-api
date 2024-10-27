@@ -13,8 +13,6 @@ export default class FinishRide implements UseCase {
     async execute(input: Input): Promise<void> {
         const ride = await this.rideRepository.getRideById(input.rideId)
         ride.register('rideCompleted', async (event: RideCompletedEvent) => {
-            // this.mediator.notify('rideCompleted', event)
-            // await this.paymentGateway.processPayment(event);
             await this.queue.publish('rideCompleted', event);
         })
         ride.finish();
