@@ -67,6 +67,8 @@ test('Should finish a ride', async function () {
         toLong: -48.522234807851476
     }
     const outputRequestRide = await requestRide.execute(inputRequestRide);
+    console.log(outputRequestRide);
+
     const inputDriver = {
         name: 'any name',
         email: `any_email${Math.random()}@mail.com`,
