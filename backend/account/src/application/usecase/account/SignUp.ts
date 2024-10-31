@@ -16,8 +16,8 @@ export default class SignUp implements UseCase {
         const existingAccount = await this.accountRepository.getAccountByEmail(input.email);
         if (existingAccount) throw new Error('Account already exists');
         const account = Account.create(input.name, input.email, input.cpf, input.carPlate || '', !!input.isPassenger, !!input.isDriver, input.password);
+        await this.mailerGateway.send(account.getEmail(), 'Welcome', '');
         await this.accountRepository.saveAccount(account);
-        this.mailerGateway.send(account.getEmail(), 'Welcome', '');
         return {
             accountId: account.accountId
         };
