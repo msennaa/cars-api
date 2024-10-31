@@ -21,6 +21,16 @@ test('should create a passenger new account successfully', async () => {
     expect(outputGetAccount.cpf).toBe(input.cpf)
 })
 
+test('should create a passenger new account successfully async', async () => {
+    const input = {
+        name: 'any name',
+        email: `any_email_async${Math.random()}@mail.com`,
+        cpf: '97456321558',
+        isPassenger: true
+    }
+    await axios.post("http://localhost:3001/signup_async", input)
+})
+
 test('should not create a passenger with invalid cpf', async () => {
     const input = {
         name: 'any name',
