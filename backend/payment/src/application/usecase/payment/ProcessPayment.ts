@@ -2,6 +2,7 @@ import e from 'express';
 import Transaction from '../../../domain/entity/Transaction';
 import PaymentGateway from '../../gateway/PaymentGateway';
 import TransactionRepository from '../../repository/TransactionRepository';
+import { RabbitMQAdapter } from '../../../infra/queue/Queue';
 
 export default class ProcessPayment {
     constructor(readonly transactionRepository: TransactionRepository, readonly paymentGateway: PaymentGateway, readonly fallbackGateway: PaymentGateway) {
@@ -30,6 +31,10 @@ export default class ProcessPayment {
             transaction.reject();
         }
         await this.transactionRepository.saveTransaction(transaction);
+        const queue = new RabbitMQAdapter();
+        await queue.connect();
+        await queue.setup('paymentApproved', '');
+        await queue.publish('paymentApproved', { rideId: input.rideId, status: transaction.status });
         return {
             transactionId: transaction.transactionId,
         }
