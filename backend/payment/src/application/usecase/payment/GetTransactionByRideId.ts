@@ -6,7 +6,7 @@ export default class GetTransactionByRideId {
     }
 
     async execute(rideId: string): Promise<any> {
-        const transaction = await this.transactionRepository.getTransactionById(rideId);
+        const transaction = await this.transactionRepository.getTransactionByRideId(rideId);
         return transaction;
     }
 }
