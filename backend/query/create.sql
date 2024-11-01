@@ -1,7 +1,9 @@
-create table transactions (
-    transaction_id uuid,
-	ride_id uuid,
-	amount numeric,
+create table ride_projection (
+    ride_id uuid,
+	fare numeric,
 	status text,
-	date timestamp
+	passenger_name text,
+	driver_name text,
+    payment_status text,
+    payment_amount numeric
 );
