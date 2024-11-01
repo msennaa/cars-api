@@ -1,5 +1,3 @@
-import { PgPromiseAdapter } from '../../infra/database/DatabaseConnection';
-import axios from 'axios';
 import HttpClient from '../../infra/http/HttpClient';
 
 export default class GetRideApiComposition {
@@ -11,9 +9,7 @@ export default class GetRideApiComposition {
         const ride = await this.httpClient.get(`http://localhost:3000/rides/${rideId}`)
         const passenger = await this.httpClient.get(`http://localhost:3001/accounts/${ride.passengerId}`);
         const driver = await this.httpClient.get(`http://localhost:3001/accounts/${ride.driverId}`);
-        const payment = await this.httpClient.get(`http://localhost:3002/transactions/${ride.ride_id}`);
-
-
+        const payment = await this.httpClient.get(`http://localhost:3002/transactions/${rideId}`);
         return {
             ride,
             passenger,
